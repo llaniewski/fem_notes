@@ -4,10 +4,10 @@ library(rgl) # for the nice color gadient triangle elements
 
 Lx = 2
 Ly = 1
-H = 0.001
-nx = 30+1
-ny = 10+1
-alpha = 1
+H = 0.001 # 1mm
+nx = 21
+ny = 10
+alpha = 111e-6 # 111mm^/s
 
 points = expand.grid(x=seq(0,Lx,len=nx),y=seq(0,Ly,len=ny))
 m = nrow(points)
@@ -22,12 +22,16 @@ elements = data.frame(
 elements$center_x = (points$x[elements$i0+1]+points$x[elements$i1+1]+points$x[elements$i2+1])/3
 elements$center_y = (points$y[elements$i0+1]+points$y[elements$i1+1]+points$y[elements$i2+1])/3
 
-sel = elements$center_x > Lx*0.33 & elements$center_x < Lx*0.66 & elements$center_y > Ly*0.5
-elements$h[sel] = H/100
+sel = elements$center_x > Lx*0.2 & elements$center_x < Lx*0.4 & elements$center_y > Ly*0.3333
+sel = sel | (elements$center_x > Lx*0.6 & elements$center_x < Lx*0.8 & elements$center_y < Ly*0.6666)
+elements$h[sel] = H/10
 
-plot_mesh = function(px,py,i0,i1,i2,col=0) {
+plot_mesh = function(px,py,i0,i1,i2,col=0,alpha=1) {
     plot(px,py,asp=1)
     plot3d(px, py,0, asp="iso")
+    if (max(alpha) > 0) {
+        alpha = alpha / max(alpha)
+    }
     if (max(col) > min(col)) {
         col = (col-min(col))/(max(col)-min(col))
         col = colorRamp(c("black","red","yellow","white"))(col)
@@ -36,17 +40,20 @@ plot_mesh = function(px,py,i0,i1,i2,col=0) {
         col[] = 3
     }
     i = as.vector(rbind(i0,i1,i2))
+    if (length(alpha) == length(i0)) alpha=rep(alpha,each=3)
+    if (length(alpha) == length(px)) alpha=alpha[i+1]
     if (length(col) == length(i0)) col=rep(col,each=3)
     if (length(col) == length(px)) col=col[i+1]
     triangles3d(
         px[i+1],
         py[i+1],
         0,
-        col=col
+        col=col,
+        alpha=alpha
     )
 }
 
-plot_mesh(points$x, points$y, elements$i0, elements$i1, elements$i2, col=elements$h)
+plot_mesh(points$x, points$y, elements$i0, elements$i1, elements$i2, alpha=elements$h)
 
 dofs = nrow(points)
 RHS = rep(0,dofs)
@@ -73,14 +80,12 @@ for (i in seq_len(nrow(elements))) {
 
 to_fix = which(points$x == 0)-1
 S[to_fix+1, ] = diag(dofs)[to_fix+1, ]
-RHS[to_fix+1] = 1
+RHS[to_fix+1] = 100
 
 to_fix = which(points$x == Lx)-1
 S[to_fix+1, ] = diag(dofs)[to_fix+1, ]
-RHS[to_fix+1] = -1
+RHS[to_fix+1] = 0
 
 x = solve(S,RHS)
 
-
-
-plot_mesh(points$x, points$y, elements$i0, elements$i1, elements$i2, col=x)
+plot_mesh(points$x, points$y, elements$i0, elements$i1, elements$i2, col=x, alpha=elements$h)
