@@ -8,6 +8,8 @@
 \sisetup{range-units=single}
 \sisetup{per-mode=symbol}
 
+\usepackage{xcolor}
+\usepackage[unicode]{hyperref}
 \usepackage{minted}
 \usepackage{fullpage}
 
@@ -15,6 +17,8 @@
 \usepackage[siunitx]{circuitikz}
 
 \usepackage{enumitem}
+
+\usepackage{import}
 
 \newcommand{\mat}[1]{\left[\begin{matrix}#1\end{matrix}\right]}
 \newcommand{\vectwo}[2]{\left[\begin{matrix}#1\\#2\end{matrix}\right]}
@@ -157,7 +161,8 @@ show that:
     \item Extension to larger systems.
     \item Exploration of DOFs, loads, constraints.
 \end{itemize}
-\inputminted{python}{truss.py}
+
+\input{test.tex}
 
 \section{Lecture}
 \subsection{FEM as a general method}
