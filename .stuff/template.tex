@@ -1,0 +1,19 @@
+\documentclass{article}
+
+\usepackage{amssymb,amsmath}
+\usepackage{xcolor}
+\usepackage[unicode]{hyperref}
+\usepackage{graphicx}
+\usepackage{minted}
+
+$if(title)$
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+
+\author{$for(author)$$author$$sep$ \and $endfor$}
+
+\date{$date$}
+
+\begin{document}
+$body$
+\end{document}

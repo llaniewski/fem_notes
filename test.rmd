@@ -1,0 +1,22 @@
+---
+title: "Theming with bslib and thematic"
+output: 
+  latex_document:
+    pandoc_args: --lua-filter=.stuff/minted.lua
+    template: .stuff/template.tex
+---
+
+### base
+
+```{r, highlight=FALSE}
+plot(pressure, col = thematic::thematic_get_option("accent"))
+```
+
+This is a test of some text
+
+And then a test of some equations:
+$$f = 1$$
+
+```{r}
+plot(pressure, col = thematic::thematic_get_option("accent"))
+```
