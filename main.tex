@@ -35,6 +35,7 @@
 \newcommand{\pr}[1]{\frac{\partial}{\partial #1}}
 
 \AddToHook{cmd/section/before}{\clearpage}
+\AddToHook{cmd/subsection*/before}{\clearpage}
 \newtheorem{exercise}{Exercise}[section]
 
 \begin{document}
@@ -111,7 +112,7 @@ where $A$, $E$ and $L$ are cross-section area, Young modulus and length of the b
 
 If time allows:
 Explanation of the work of a distributed force on the example of gravity, and note on assumption of linear shape function.
-
+\newpage
 \subsection*{Exercises}
 Before the next lecture:
 \begin{exercise}
