@@ -1,0 +1,22 @@
+\documentclass[12pt,class=article,crop=false,preview=false]{standalone}
+
+\input{preamble}
+\setcounter{section}{2}
+
+\begin{document}
+\subsection*{Exercises}
+
+\begin{exercise}
+    Show that without dumping, energy in the explicit method is constatly growing, and constantly decreasing in implicit method. 
+\end{exercise}
+
+\begin{align*}
+E_{n+1} 
+&= \frac12 y_{n+1}^TMy_{n+1} + \frac12 x_{n+1}^TSx_{n+1} + x_{n+1}^TF =\\
+&= \frac12 \left(M\dot y_n + dt(F - Dy_n - Sx_n)\right)^TM^{-1}\left(M\dot y_n + dt(F - Dy_n - Sx_n)\right) + \frac12 \left(x_n + dt y_n\right)^TS\left(x_n + dt y_n\right) + \left(x_n + dt y_n\right)^TF =\\
+&= \frac12 y_n^TMy_n + dty_n^T\left(F - Dy_n - Sx_n\right) + \frac12dt^2\left(F - Dy_n - Sx_n\right)^T M^{-1}\left(F - Dy_n - Sx_n\right) + \frac12 x_n^TSx_n + dt y_n^TSx_n + \frac12dt^2y_n^TSy_n + x_n^TF + dt y_n^TF =\\
+&= E_n + dt \left[y_n^T\left(F - Dy_n - Sx_n\right) + y_n^TSx_n + y_n^TF\right] + \frac12dt^2\left[\left(F - Dy_n - Sx_n\right)^T M^{-1}\left(F - Dy_n - Sx_n\right) + y_n^TSy_n\right] =\\
+&= E_n - dt y_n^TDy_n + \frac12dt^2\left[\left(F - Dy_n - Sx_n\right)^T M^{-1}\left(F - Dy_n - Sx_n\right) + y_n^TSy_n\right] =\\
+\end{align*}
+
+\end{document}

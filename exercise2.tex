@@ -1,0 +1,35 @@
+\documentclass[12pt,class=article,crop=false,preview=false]{standalone}
+
+\input{preamble}
+\setcounter{section}{2}
+
+\begin{document}
+\subsection*{Exercises}
+
+\begin{exercise}
+For a element size $h$ and four points $p^0=\{0,0\}$, $p^1=\{h,0\}$, $p^2=\{0,h\}$, $p^3=\{h,h\}$ forming a square in 2D:
+\begin{enumerate}[label=\alph*)]
+\item check what is the minimal order of a polynomial, which could would evaluate to $1$ on one of the points and $0$ on remaining three.
+\item propose four such functions $\phi_i$, each evaluating to $1$ on the corresponding point $p_i$.
+\item Compute $\int_\square\phi_i\phi_j$ for every pair of $i$ and $j$. Are there any symmetries you can exploit?
+\item Compute $\int_\square \left(\rr{\phi_i}{x}\rr{\phi_j}{x} + \rr{\phi_i}{y}\rr{\phi_j}{y}\right)$
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+For a function $A:\mathbb{R}^{n\times n}\rightarrow\mathbb{R}^{n\times n}$ which takes a matrix and returns a matrix:
+\[A(B) = \alpha B + \beta I \tr{B},\quad\text{(reminder: $\tr{B}=\sum_iB_{ii}$)}\]
+show that for any matrix $C$:
+\[C^{-1}A(B)C = A\big(C^{-1}BC\big)\]
+\end{exercise}
+
+\begin{exercise}
+For a function $f(x) = e^{\mathrm{i}kx}$ calculate:
+\begin{enumerate}[label=\alph*)]
+\item $f''(x)$
+\item $\frac{2f(x)-f(x+h)-f(x-h)}{h^2}$
+\end{enumerate}
+And compare the results. What can you say about these results for $f(x) = e^{-\mathrm{i}kx}$ and $f(x) = \cos{kx}$?
+\end{exercise}
+
+\end{document}

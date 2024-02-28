@@ -1,0 +1,174 @@
+\documentclass[12pt,class=article,crop=false,preview=false]{standalone}
+
+\input{preamble}
+\setcounter{section}{1}
+%\excludecomment{solution}
+
+\begin{document}
+
+\subsection*{Exercises}
+These are exercises for you to practice some useful math before the next lecture. Note: exercises 1 and 3 are about deriving expressions needed, not calculating the final values. One can think of it this way: what would I need to calculate it in Python or Matlab?
+
+\begin{exercise}
+Express the equations describing the below electric circuit in a matrix form.
+\begin{enumerate}[label=\alph*)]
+    \item Identify the element matrices.
+    \item Is the system square and non-singular? If not, how can it be adjusted?
+    \item How to calculate total energy consumption of this circuit in Watts?
+\end{enumerate}
+\begin{center}
+\newcommand{\nlab}[1]{node[label={[font=\footnotesize]-100:$#1$}] {}}
+\begin{circuitikz}
+\draw (0,0) \nlab{V_0} to[R=3<\kilo\ohm>,*-*] (2,0) \nlab{V_1} to[resistor, l=3<\kilo\ohm>,-*] (4,0) \nlab{V_2} to[resistor, l=3<\kilo\ohm>,-*] (6,0) \nlab{V_3}
+(2,0) -- (2,1) to[resistor, l=4<\kilo\ohm>] (6,1) -- (6,0)
+(6,0) -- (6,-1) to[battery, l=5<\volt>] (0,-1) -- (0,0);
+\end{circuitikz}
+\end{center}
+\end{exercise}
+
+\begin{solution}
+Let's call the resistors $A,B,C$ and $D$. From the Ohm law:
+\begin{align*}
+I_A &= \frac{1}{R_A}\left(V_1 - V_0\right) & I_B &= \frac{1}{R_B}\left(V_2 - V_1\right)\\
+I_C &= \frac{1}{R_C}\left(V_3 - V_2\right) & I_D &= \frac{1}{R_D}\left(V_3 - V_1\right)
+\end{align*}
+Let us call the battery current $I_\text{battery}$. Writing out the balance of current in each node, we get:
+\begin{align*}
+I_\text{battery} - I_A &= 0\\
+I_A - I_B - I_D &= 0\\
+I_B - I_C &= 0\\
+I_C + I_D - I_\text{battery} &= 0\\
+\end{align*}
+
+Now we substitute the currents from Ohm's law.
+
+\emph{Option 1:} We ``forget'' about the battery for a second, and treat $I_\text{battery}$ as a input. We get:
+\[
+\mat{
+\frac{1}{R_A} & - \frac{1}{R_A} & 0 & 0\\
+-\frac{1}{R_A} & \frac{1}{R_A}+\frac{1}{R_B}+\frac{1}{R_D} & -\frac{1}{R_B} & -\frac{1}{R_D}\\
+0 & -\frac{1}{R_B} & \frac{1}{R_B} + \frac{1}{R_C} & -\frac{1}{R_C}\\
+0 & -\frac{1}{R_D} & -\frac{1}{R_C} & \frac{1}{R_C} + \frac{1}{R_D}
+}\mat{V_0\\V_1\\V_2\\V_3} = \mat{-I_\text{battery}\\0\\0\\I_\text{battery}}
+\]
+The matrix is singular. We replace the first and last equation with boundary conditions $V_0=5[V]$ and $V_3=0$.
+
+\emph{Option 2:} We treat $I_\text{battery}$ as and additional variable, and difference in voltages as an additional equation. We get:
+\[
+\mat{
+\frac{1}{R_A} & - \frac{1}{R_A} & 0 & 0 & 1\\
+-\frac{1}{R_A} & \frac{1}{R_A}+\frac{1}{R_B}+\frac{1}{R_D} & -\frac{1}{R_B} & -\frac{1}{R_D} & 0\\
+0 & -\frac{1}{R_B} & \frac{1}{R_B} + \frac{1}{R_C} & -\frac{1}{R_C} & 0\\
+0 & -\frac{1}{R_D} & -\frac{1}{R_C} & \frac{1}{R_C} + \frac{1}{R_D} & -1\\
+1 & 0 & 0 & -1 & 0
+}\mat{V_0\\V_1\\V_2\\V_3\\I_\text{battery}} = \mat{0\\0\\0\\0\\5}
+\]
+The matrix is singular. We replace the forth equation with $V_3=0$ to establish base voltage.
+
+\begin{enumerate}[label=\alph*)]
+    \item Whatever way you do it, the element matrices can be easily spotted and are the same as for springs:
+\[\mat{\frac{1}{R} & -\frac{1}{R} \\ -\frac{1}{R} & \frac{1}{R}}\]
+    \item In either option the matrix needs adjustment to be non-singular. This is because voltage levels have to be established (one has to say what is "0", as voltages is a relative measure)
+    \item To calculate wattage, one can either calculate $I_\text{battery}\cdot 5[V]$, or $I_A(V_1-V_0)+I_B(V_2-V_1)+I_C(V_3-V_2)+I_D(V_3-V_1)$. A good student should notice that these expressions for each resistors are the same as:
+    \[I(V_1-V_0) = \frac{1}{R}(V_1-V_0)(V_1-V_0) = \mat{V_0\\V_1}^T\mat{\frac{1}{R} & -\frac{1}{R} \\ -\frac{1}{R} & \frac{1}{R}}\mat{V_0\\V_1}\]
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}
+For a 3D domain $\Omega$, knowing that:
+\[\int_{\partial\Omega} n_i f = \int_\Omega\pr{x_i} f\]
+show that:
+\begin{align}
+\int_{\partial\Omega} v\cdot n &= \int_\Omega\dive{v}\\ 
+\int_{\partial\Omega} f n &= \int_\Omega\grad{f}\\
+\int_{\partial\Omega} \rr{f}{n} &= \int_\Omega\Delta f\\
+\int_\Omega g\rr{f}{x_i} &= \int_{\partial\Omega} n_i fg - \int_\Omega \frac{\partial g}{\partial x_i}f\\
+\int_\Omega v\cdot\grad{f} &= \int_{\partial\Omega} (v\cdot n)f - \int_\Omega f\dive{v}\\
+\int_\Omega f\Delta{g} &= \int_{\partial\Omega} g\rr{f}{n} - \int_\Omega (\grad{f})\cdot(\grad{g})
+\end{align}
+\end{exercise}
+
+\begin{solution}
+First two expressions in this task is a simple substitution:
+\begin{align*}
+    (1) = \int_{\partial\Omega} v\cdot n
+    &= \int_{\partial\Omega} (v_xn_x+v_yn_y+v_zn_z) = \\
+    &= \int_{\partial\Omega} v_xn_x + \int_{\partial\Omega}v_yn_y + \int_{\partial\Omega}v_zn_z = \\
+    &= \int_{\Omega} \pr{x}v_x + \int_{\Omega} \pr{y}v_y + \int_{\Omega} \pr{z}v_z = \\
+    &= \int_{\Omega} (\pr{x}v_x + \pr{y}v_y + \pr{z}v_z) = \\
+    &= \int_{\Omega} \dive v\\
+    (2) = \int_{\partial\Omega} f n
+    &= \int_{\partial\Omega} f \mat{n_x & n_y & n_z} = \\
+    &= \mat{\int_{\partial\Omega} f n_x & \int_{\partial\Omega} f n_y & \int_{\partial\Omega} f n_z} = \\
+    &= \mat{\int_{\Omega} \pr{x}f & \int_{\Omega} \pr{y}f & \int_{\Omega} \pr{z}f} = \\
+    &= \int_{\Omega} \mat{\pr{x}f & \pr{y}f & \pr{z}f} = \\
+    &= \int_{\Omega} \grad f
+\end{align*}
+Eq. (3) follows from (1), as $\int_{\partial\Omega} \rr{f}{n} = \int_{\partial\Omega} \grad{f}\cdot n = \int_{\Omega} \dive\grad{f} = \int_{\Omega} \Delta f$. Finally the (4), (5) and (6) is just integration by parts, so they use the fact that $(fg)' = f'g + fg'$, from which it follows that $f'g = (fg)' - fg'$.
+\begin{align*}
+(4) = \int_\Omega g\rr{f}{x_i}
+&= \int_\Omega \left(\pr{x_i}(fg) - \rr{g}{x_i}f\right) =\\
+&= \int_\Omega \pr{x_i}(fg) - \int_\Omega \rr{g}{x_i}f =\\
+&= \int_{\partial\Omega} n_i fg - \int_\Omega \rr{g}{x_i}f\\
+(5) = \int_\Omega v\cdot\grad{f}
+&= \int_\Omega \left(\dive(vf) - (\dive v)f\right) =\\
+&= \int_\Omega\dive(vf) - \int_\Omega(\dive v)f =\\
+&= \int_{\partial\Omega}n\cdot vf - \int_\Omega(\dive v)f\\
+(6) = \int_\Omega f\Delta{g}
+&= \int_\Omega \left(\dive(f\grad{g} - \grad{f}\cdot\grad{g}\right) =\\
+&= \int_\Omega\dive(f\grad{g} - \int_\Omega \grad{f}\cdot\grad{g} =\\
+&= \int_{\partial\Omega}fn\cdot\grad{g} - \int_\Omega \grad{f}\cdot\grad{g} =\\
+&= \int_{\partial\Omega}f\rr{g}{n} - \int_\Omega \grad{f}\cdot\grad{g}\\
+\end{align*}
+One does not need to know or remember any of the expressions with $\grad$ or $\dive$, as the same things can be done with writing everything explicitly over $x$, $y$ and $z$ if one prefers.
+\end{solution}
+
+\begin{exercise}
+    Three points, $p^0=\mat{p^0_x& p^0_y}$, $p^1=\mat{p^1_x& p^1_y}$, and $p^2=\mat{p^2_x& p^2_y}$, exist in a 2D plane. There exists a linear function, $f$, with the value of $1$ in $p^0$ and $0$ in the other two points, meaning: $f(p^0)=1$, $f(p^1)=0$ and $f(p^2)=0$. Do the following:
+    \begin{enumerate}[label=\alph*)]
+        \item Write out the general form of a linear function in 2D, and for the information provided write the equations its coefficients have to fulfil
+        \item Express these equations as a matrix equation
+        \item Express the derivatives of $f$ with respect to $x$ and $y$, in terms of these coefficients,
+        \item Can you calculate the integral of $f$ over the triangle formed by the three points, without calculating these coefficients explicitly?
+        \item Can you calculate the integral of the gradient of $f$ over the same triangle?
+    \end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}[label=\alph*)]
+\item Let us have a linear function $f(x,y) = A+Bx+Cy$. The three conditions can be expressed as:
+\begin{align*}
+    A+Bp^0_x+Cp^0_y &= 1\\
+    A+Bp^1_x+Cp^1_y &= 0\\
+    A+Bp^2_x+Cp^2_y &= 0
+\end{align*}
+\item which in matrix form is:
+\[\mat{
+1 & p^0_x & p^0_y\\
+1 & p^1_x & p^1_y\\
+1 & p^2_x & p^2_y
+}\mat{A\\B\\C} = \mat{1\\0\\0}\]
+\end{enumerate}
+
+This is enough to calculete the function in a computer and we don't need to solve this equation.
+
+But we can, of course. Subtracting second from first equation, and third from first, we get:
+\begin{align*}
+    B(p^0_x-p^1_x)+C(p^0_y-p^1_y) &= 1\\
+    B(p^0_x-p^2_x)+C(p^0_y-p^2_y) &= 1
+\end{align*}
+From which we can get (e.g. by Cramer's rule):
+\begin{align*}
+    B &= \frac{1}{d}((p^0_y-p^2_y) - (p^0_y-p^1_y))\\
+    C &= \frac{1}{d}((p^0_x-p^1_x) - (p^0_x-p^2_x))
+\end{align*}
+where $d = (p^0_x-p^1_x)(p^0_y-p^2_y) - (p^0_y-p^1_y)(p^0_x-p^2_x)$
+
+\begin{enumerate}[label=\alph*)]\setcounter{enumi}{2}
+    \item The derivatives are of course $B$ and $C$.
+    \item The integral over the triangle can be computed analytically, but it's a pain. But there are two simple solutions. One is to notice that it's just a volume of a tetrahedron with height $1$ and the triangle as the base (which area is $\frac{d}{2}$). The other is to change variables. Here the determinant of the Jacobian will be $d$ and the integral over a simple triangle will be $\frac{1}{6}$. Either way the value of the integral is $\frac{d}{6}$
+    \item The gradient is constant across the triangle, so it's integral is its value times the area, which is again $\frac{d}{2}$.
+\end{enumerate}
+\end{solution}
+
+\end{document}

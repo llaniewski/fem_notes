@@ -1,42 +1,13 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+\documentclass[12pt]{article}
 
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{siunitx}
-\sisetup{range-phrase=--}
-\sisetup{range-units=single}
-\sisetup{per-mode=symbol}
+\input{preamble}
+\usepackage{standalone}
 
-\usepackage{xcolor}
-\usepackage[unicode]{hyperref}
-\usepackage{minted}
-\usepackage{fullpage}
-
-\usepackage{tikz}
-\usepackage[siunitx]{circuitikz}
-
-\usepackage{enumitem}
-
-\usepackage{import}
-
-\newcommand{\mat}[1]{\left[\begin{matrix}#1\end{matrix}\right]}
-\newcommand{\vectwo}[2]{\left[\begin{matrix}#1\\#2\end{matrix}\right]}
-\newcommand{\mattwo}[4]{\left[\begin{matrix}#1 & #3\\#2 & #4\end{matrix}\right]}
-
-\DeclareMathOperator{\dive}{div}
-\DeclareMathOperator{\grad}{grad}
-\DeclareMathOperator{\tr}{tr}
-
-\title{MECH3780}
-\author{MECH3780 team}
-
-\newcommand{\rr}[2]{\frac{\partial #1}{\partial #2}}
-\newcommand{\pr}[1]{\frac{\partial}{\partial #1}}
+\title{MECH3780 - Notes}
+\author{L Laniewski-Wollk}
 
 \AddToHook{cmd/section/before}{\clearpage}
 \AddToHook{cmd/subsection*/before}{\clearpage}
-\newtheorem{exercise}{Exercise}[section]
 
 \begin{document}
 \maketitle
@@ -54,7 +25,7 @@ Explaining that most computational engineering analysis will consist of:
 \item Design improvement --- in which you use the constructed workflow to iterativelly improve the performance of the considered design.
 \end{itemize}
 \subsection{Introduction to the FEM}
-Derivation of force balance in a sprint under tension.
+Derivation of force balance in a spring under tension.
 
 From Hook's law:
 \[F = kx\]
@@ -112,49 +83,9 @@ where $A$, $E$ and $L$ are cross-section area, Young modulus and length of the b
 
 If time allows:
 Explanation of the work of a distributed force on the example of gravity, and note on assumption of linear shape function.
+
 \newpage
-\subsection*{Exercises}
-Before the next lecture:
-\begin{exercise}
-Express the equations describing the below electric circuit in a matrix form.
-\begin{enumerate}[label=\alph*)]
-    \item Identify the element matrices.
-    \item Is the system square and non-singular? If not, how can it be adjusted?
-    \item How to calculate total energy consumption of this circuit in Watts?
-\end{enumerate}
-\begin{center}
-\newcommand{\nlab}[1]{node[label={[font=\footnotesize]-100:$#1$}] {}}
-\begin{circuitikz}
-\draw (0,0) \nlab{V_0} to[R=3<\kilo\ohm>,*-*] (2,0) \nlab{V_1} to[resistor, l=3<\kilo\ohm>,-*] (4,0) \nlab{V_2} to[resistor, l=3<\kilo\ohm>,-*] (6,0) \nlab{V_3}
-(2,0) -- (2,1) to[resistor, l=4<\kilo\ohm>] (6,1) -- (6,0)
-(6,0) -- (6,-1) to[battery, l=5<\volt>] (0,-1) -- (0,0);
-\end{circuitikz}
-\end{center}
-\end{exercise}
-
-\begin{exercise}
-For a 3D domain $\Omega$, knowing that:
-\[\int_{\partial\Omega} n_i f = \int_\Omega\pr{x_i} f\]
-show that:
-\begin{align}
-\int_{\partial\Omega} v\cdot n &= \int_\Omega\dive{v}\\
-\int_{\partial\Omega} f n &= \int_\Omega\grad{f}\\
-\int_{\partial\Omega} \rr{f}{n} &= \int_\Omega\Delta f\\
-\int_\Omega g\rr{f}{x_i} &= \int_{\partial\Omega} n_i fg - \int_\Omega \frac{\partial g}{\partial x_i}f\\
-\int_\Omega v\cdot\grad{f} &= \int_{\partial\Omega} (v\cdot n)f - \int_\Omega f\dive{v}\\
-\int_\Omega f\Delta{g} &= \int_{\partial\Omega} g\rr{f}{n} - \int_\Omega (\grad{f})\cdot(\grad{g})
-\end{align}
-\end{exercise}
-
-\begin{exercise}
-    For three points $p^0$ , $p^1$ and $p^2$ in 2D plane, and a linear function $f$ that is one in $p^0$ and zero in the other two points:
-    \begin{enumerate}[label=\alph*)]
-        \item calculate the derivatives of $f$ with respect to $x$ and $y$,
-        \item calculate the integral of $f$ over the triangle formed by the three points,
-        \item calculate the integral of the gradient of $f$ over the same triangle.
-    \end{enumerate}
-\end{exercise}
-
+\input{exercise1}
 
 \subsection*{Contact}
 
@@ -251,34 +182,8 @@ For triangle element in 2D for example we have element matrices:
 \end{align*}
 If time permits, a long rumbling about transformation of scalar product and invariance of physics operators.
 
-\subsection*{Exercises}
-
-\begin{exercise}
-For a element size $h$ and four points $p^0=\{0,0\}$, $p^1=\{h,0\}$, $p^2=\{0,h\}$, $p^3=\{h,h\}$ forming a square in 2D:
-\begin{enumerate}[label=\alph*)]
-\item check what is the minimal order of a polynomial, which could would evaluate to one on one of the points and zero on remaining three.
-\item propose four such functions $\phi_i$, each evaluating to one on the corresponding point $p_i$.
-\item Compute $\int_\square\phi_i\phi_j$ for every pair of $i$ and $j$. Are there any symmetries you can exploit?
-\item Compute $\int_\square \left(\rr{\phi_i}{x}\rr{\phi_j}{x} + \rr{\phi_i}{y}\rr{\phi_j}{y}\right)$
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise}
-For a function $A:\mathbb{R}^{n\times n}\rightarrow\mathbb{R}^{n\times n}$ which takes a matrix and returns a matrix:
-\[A(B) = \alpha B + \beta I \tr{B},\quad\text{(reminder: $\tr{B}=\sum_iB_{ii}$)}\]
-show that for any matrix $C$:
-\[C^{-1}A(B)C = A\big(C^{-1}BC\big)\]
-\end{exercise}
-
-\begin{exercise}
-For a function $f(x) = e^{\mathrm{i}kx}$ calculate:
-\begin{enumerate}[label=\alph*)]
-\item $f''(x)$
-\item $\frac{2f(x)-f(x+h)-f(x-h)}{h^2}$
-\end{enumerate}
-And compare the results. What can you say about these results for $f(x) = e^{-\mathrm{i}kx}$ and $f(x) = \cos{kx}$?
-\end{exercise}
-
+\newpage
+\input{exercise2}
 
 \subsection*{Contact}
 \begin{itemize}
@@ -361,18 +266,8 @@ It is common to neglect one or two dimensions of the elements assuming a simplif
 
 TODO: beam element types, membranes and RBE2 and RBE3.
 
-\subsection*{Exercises}
-\begin{exercise}
-    Show that stress tensor $\sigma$ is symmetric, by assuming $\sigma$ is constant in a region and calculating the moment acting on a small rectangular prism.
-\end{exercise}
-
-\begin{exercise}
-Show that $\lambda = \frac{E\nu}{(1+\nu)(1-2\nu)}$ and $\mu=\frac{E}{2(1+\nu)}$, by substituting the stress and strain in a axially loaded beam into the constitutive equation.
-\end{exercise}
-
-\begin{exercise}
-TODO
-\end{exercise}
+\newpage
+\input{exercise3}
 
 \subsection*{Contact}
 \begin{itemize}
@@ -461,13 +356,8 @@ In most structural analysis, there are two properties one is interested in:
 
 \subsection{Workflow revisited --- Design improvement}
 
-\subsection*{Exercises}
-\begin{exercise}
-    Write the form of the stress and strain matrices on the symmetry plane (assume the symmetry is in $z$ direction)
-\end{exercise}
-\begin{exercise}
-    TODO
-\end{exercise}
+\newpage
+\input{exercise4}
 
 \subsection*{Contact}
 \begin{itemize}
@@ -545,21 +435,8 @@ M y_{n+1} &= M\dot y_n + dt(F - Dy_{n+1} - Sx_{n+1})\\
 x_{n+1} &= x_n + dt y_{n+1}
 \end{cases}\]
 
-
-\subsection*{Exercises}
-\begin{exercise}
-    Show that without dumping, energy in the explicit method is constatly growing, and constantly decreasing in implicit method. 
-\end{exercise}
-
-\begin{align*}
-E_{n+1} 
-&= \frac12 y_{n+1}^TMy_{n+1} + \frac12 x_{n+1}^TSx_{n+1} + x_{n+1}^TF =\\
-&= \frac12 \left(M\dot y_n + dt(F - Dy_n - Sx_n)\right)^TM^{-1}\left(M\dot y_n + dt(F - Dy_n - Sx_n)\right) + \frac12 \left(x_n + dt y_n\right)^TS\left(x_n + dt y_n\right) + \left(x_n + dt y_n\right)^TF =\\
-&= \frac12 y_n^TMy_n + dty_n^T\left(F - Dy_n - Sx_n\right) + \frac12dt^2\left(F - Dy_n - Sx_n\right)^T M^{-1}\left(F - Dy_n - Sx_n\right) + \frac12 x_n^TSx_n + dt y_n^TSx_n + \frac12dt^2y_n^TSy_n + x_n^TF + dt y_n^TF =\\
-&= E_n + dt \left[y_n^T\left(F - Dy_n - Sx_n\right) + y_n^TSx_n + y_n^TF\right] + \frac12dt^2\left[\left(F - Dy_n - Sx_n\right)^T M^{-1}\left(F - Dy_n - Sx_n\right) + y_n^TSy_n\right] =\\
-&= E_n - dt y_n^TDy_n + \frac12dt^2\left[\left(F - Dy_n - Sx_n\right)^T M^{-1}\left(F - Dy_n - Sx_n\right) + y_n^TSy_n\right] =\\
-\end{align*}
-
+\newpage
+\input{exercise5}
 
 \subsection*{Contact}
 \begin{itemize}
