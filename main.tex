@@ -235,6 +235,35 @@ and in the context of the linear elasticity theory is called the infinitesimal s
 The Lam\'e parameters, can be tied to the more commonly used Young's modulus $E$, and Poisson's ratio $\nu$:
 \[\lambda = \frac{E\nu}{(1+\nu)(1-2\nu)}\quad\text{and}\quad\mu=\frac{E}{2(1+\nu)}\]
 
+Thus:
+\[\sigma = \frac{E}{1+\nu}\left(\varepsilon + \frac{\nu}{1-2\nu} I \tr{\varepsilon}\right)\]
+
+Sometimes written:
+\[\mat{\sigma_{xx}\\\sigma_{yy}\\\sigma_{zz}\\\sigma_{yz}\\\sigma_{xz}\\\sigma_{xy}} = \underbrace{\mat{
+2\mu+\lambda&\lambda&\lambda&0&0&0\\
+\lambda&2\mu+\lambda&\lambda&0&0&0\\
+\lambda&\lambda&2\mu+\lambda&0&0&0\\
+0&0&0&2\mu&0&0\\
+0&0&0&0&2\mu&0\\
+0&0&0&0&0&2\mu
+}}_{C\text{ --- Hook's tensor}}\mat{\varepsilon_{xx}\\\varepsilon_{yy}\\\varepsilon_{zz}\\\varepsilon_{yz}\\\varepsilon_{xz}\\\varepsilon_{xy}}\]
+
+If we calculate trace:
+\[\frac{1+\nu}{E}\tr\sigma = \tr\varepsilon + \frac{\nu}{1-2\nu} 3 \tr{\varepsilon} = \frac{1+\nu}{1-2\nu} \tr{\varepsilon}\]
+\[\tr{\varepsilon} = \frac{1-2\nu}{E}\tr\sigma\]
+thus:
+\[\frac{1+\nu}{E}\sigma = \varepsilon + I \frac{\nu}{E}\tr\sigma\]
+\[\varepsilon = \frac{1}{E}\left((1+\nu)\sigma - \nu I\tr\sigma\right)\]
+We have now:
+\[\mat{\varepsilon_{xx}\\\varepsilon_{yy}\\\varepsilon_{zz}\\\varepsilon_{yz}\\\varepsilon_{xz}\\\varepsilon_{xy}} = \frac{1}{E}\underbrace{\mat{
+1&-\nu&-\nu&0&0&0\\
+-\nu&1&-\nu&0&0&0\\
+-\nu&-\nu&1&0&0&0\\
+0&0&0&1-\nu&0&0\\
+0&0&0&0&1-\nu&0\\
+0&0&0&0&0&1-\nu
+}}_{C^{-1}\text{ --- inverseHook's tensor}}\mat{\sigma_{xx}\\\sigma_{yy}\\\sigma_{zz}\\\sigma_{yz}\\\sigma_{xz}\\\sigma_{xy}}\]
+
 \subsection{Plane stress/strain, uniaxial/biaxial loading, shear}
 
 Strain and stress can have reduced dimensionality when confined to 2D or 1D cases. Nevertheless it is vital to understand that the presence of first Lam\'e parameter (or Poisson's ration) means that strain in any direction contributes to any direction of stress, and vice-versa. This means that even if we have no stress in one direction (so-called plane stress):
@@ -249,7 +278,7 @@ To understand when these situations occur, the simplest is to remember that zero
     \item axially loaded beam
     \item tensioned membrane
     \item beam loaded from sides
-    \item compressed underground rock
+    \item stress in a dam
     \item bending of a beam
     \item wall of pressure tank (trick question)
 \end{itemize}

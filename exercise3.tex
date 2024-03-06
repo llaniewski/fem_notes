@@ -1,7 +1,9 @@
 \documentclass[12pt,class=article,crop=false,preview=false]{standalone}
 
 \input{preamble}
-\setcounter{section}{2}
+\setcounter{section}{3}
+
+\excludecomment{solution}
 
 \begin{document}
 \subsection*{Exercises}
@@ -10,12 +12,113 @@
     Show that stress tensor $\sigma$ is symmetric, by assuming $\sigma$ is constant in a region and calculating the moment acting on a small rectangular prism.
 \end{exercise}
 
-\begin{exercise}
-Show that $\lambda = \frac{E\nu}{(1+\nu)(1-2\nu)}$ and $\mu=\frac{E}{2(1+\nu)}$, by substituting the stress and strain in a axially loaded beam into the constitutive equation.
-\end{exercise}
+\begin{solution}
+    Let $\sigma = \mat{
+        \sigma_{xx}&\sigma_{xy}&\sigma_{xz}\\
+        \sigma_{yx}&\sigma_{yy}&\sigma_{yz}\\
+        \sigma_{zx}&\sigma_{zy}&\sigma_{zz}}$ be constant. Let us have a small rectangular prism $[-a,a]\times[-a,a]\times[-a,a]$, and let us name its six faces as A,B,C,D,E and F:
+    
+    \begin{tikzpicture}[tdplot_main_coords]
+        \draw[->] (-2,0,0) -- (2,0,0);
+        \draw[->] (0,-2,0) -- (0,2,0);
+        \draw[->] (0,0,-2) -- (0,0,2);
+        \node[anchor=south east] at (2,0,0) {x};
+        \node[anchor=south east] at (0,2,0) {y};
+        \node[anchor=north east] at (0,0,2) {z};
+        \draw (1,-1,-1) -- (1,-1,1) -- (-1,-1,1) -- (-1,1,1) -- (-1,1,-1) -- (1,1,-1) -- cycle;
+        \draw (1,-1,1) -- (1,1,1) -- (-1,1,1) (1,1,-1) -- (1,1,1);
+        \draw[dashed] (1,-1,-1) -- (-1,-1,-1) -- (-1,-1,1) (-1,1,-1) -- (-1,-1,-1);
+        \begin{scope}[shift={(5,0,0)}]
+        \draw (1,-1,-1) -- (1,-1,1) -- (-1,-1,1) -- (-1,1,1) -- (-1,1,-1) -- (1,1,-1) -- cycle;
+        \draw (1,-1,1) -- (1,1,1) -- (-1,1,1) (1,1,-1) -- (1,1,1);
+        \draw[dashed] (1,-1,-1) -- (-1,-1,-1) -- (-1,-1,1) (-1,1,-1) -- (-1,-1,-1);
+        \node at (1,0,0) {A};
+        \node[color=gray] at (-1,0,0) {B};
+        \node at (0,1,0) {C};
+        \node[color=gray] at (0,-1,0) {D};
+        \node at (0,0,1) {E};
+        \node[color=gray] at (0,0,-1) {F};
+        \end{scope}
+        \begin{scope}[shift={(10,0,0)}]
+        \draw (1,-1,-1) -- (1,-1,1) -- (-1,-1,1) -- (-1,1,1) -- (-1,1,-1) -- (1,1,-1) -- cycle;
+        \draw (1,-1,1) -- (1,1,1) -- (-1,1,1) (1,1,-1) -- (1,1,1);
+        \draw[dashed] (1,-1,-1) -- (-1,-1,-1) -- (-1,-1,1) (-1,1,-1) -- (-1,-1,-1);
+        \draw[->] (0,0,-2) -- (0,0,2);
+        \node[anchor=north east] at (0,0,2) {z};
+        \draw[-Latex,very thick] (1,-0.9,0) -- (1,0.9,0);
+        \draw[-Latex,very thick] (-0.9,1,0) -- (0.9,1,0);
+        \draw[-Latex,very thick,gray] (-1,0.9,0) -- (-1,-0.9,0);
+        \draw[-Latex,very thick,gray] (0.9,-1,0) -- (-0.9,-1,0);
+        \node[anchor=west] at (1,0,0) {$\sigma_{yx}$};
+        \node[anchor=north east] at (0,1,0) {$\sigma_{xy}$};
+        \end{scope}
+    \end{tikzpicture}
+    
+    The normal direction to A is $[1,0,0]$ and force acting on this face is $\sigma n = \mat{\sigma_{xx}\\\sigma_{yx}\\\sigma_{zx}}$. Moment of this force around the $z$ axis is $-a\sigma_{yx}$ times the area $a^2$. Calculating the same for $B$ we get again $-a^3\sigma_{yx}$. Calculating it for $C$ and $D$ we get $a^3\sigma_{xy}$, whereas for $E$ and $F$ we get $0$. For the moment to be zero we have to have:
+    \[2a^3(-\sigma_{yx} + \sigma_{xy}) = 0\]
+    Thus, $\sigma_{yx} = \sigma_{xy}$. Calculating moments around $y$ and $x$ axis we will get $\sigma_{zx} = \sigma_{xz}$ and $\sigma_{zy} = \sigma_{yz}$.
+
+    (option 2): Moment of force is the cross product of force $f$ and arm $r$ vectors. In our case $r$ is a vector from center to a point on the surface ($r=[x,y,z]$), and $f=\sigma n$. We can express is as an integral:
+    
+    \[\int_{\partial\Omega} r\times f = \int_{\partial\Omega} r\times (\sigma n) = \int_{\partial\Omega}\Gamma^{ijk}r_j\sigma_{kl} n_l= \int_{\Omega}\pr{x_l}\Gamma^{ijk}r_j\sigma_{kl}= \int_{\Omega}\Gamma^{ijk}\delta_{lj}\sigma_{kl}= \int_{\Omega}\Gamma^{ijk}\sigma_{kj}\]
+\end{solution}
 
 \begin{exercise}
-TODO
+Let us have a axially-loaded member with dimensions $L\times a\times a$, with cross-section $a^2$ and length $L$, which is fixed at one end and loaded with force $F$ on the other.
+\begin{enumerate}[label=\alph*)]
+    \item By how much will this bar elongate?
+    \item By how much will this bar shrink in other two directions?
+    \item Can you write out the displacement field $u(x,y,z)=[u_x,u_y,u_z]$, assuming that the beam is fixed in $[0,0,0]$, and the beam is oriented along the $x$ direction? Hint: it will have a form of $u(x,y,z)=[\alpha x,\beta y,\gamma z]$.
+    \item Calculate the strain $\varepsilon_{ij} = \frac{1}{2}\left(\rr{u_i}{x_j}+\rr{u_j}{x_i}\right)$
+    \item Write out the stress tensor.
+    \item Show that $\lambda = \frac{E\nu}{(1+\nu)(1-2\nu)}$ and $\mu=\frac{E}{2(1+\nu)}$, by substituting the stress and strain into the constitutive equation $\sigma = 2\mu\varepsilon + \lambda I \tr{\varepsilon}$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+For a axially-loaded bar we have $E\frac{d_L}{L} = \frac{F}{A}$, where $d_L$ is the displacement in the axial direction. In the other two directions, by the definition of Poisson ratio, $\nu$, we have $\frac{d_a}{a}=\nu\frac{d_L}{L}$.
+
+If we assume the beam to be fixed in $(0,0,0)$ we can write out the deformation field as:
+\[u(x,y,z)=\frac{F}{AE}[x,-\nu y,-\nu z]\]
+From this we can calculate the strain:
+\[\varepsilon=\frac{F}{AE}\mat{1&0&0\\0&-\nu&0\\0&0&-\nu}\]
+The stress tensor has only $xx$ component and is:
+\[\sigma=\mat{F/A&0&0\\0&0&0\\0&0&0}\]
+Substituting them into the constitutive equation:
+\begin{align*}
+\mat{F/A&0&0\\0&0&0\\0&0&0} &= 2\mu\frac{F}{AE}\mat{1&0&0\\0&-\nu&0\\0&0&-\nu} + \lambda I \tr{\frac{F}{AE}\mat{1&0&0\\0&-\nu&0\\0&0&-\nu}} \\
+\mat{F/A&0&0\\0&0&0\\0&0&0} &= 2\mu\frac{F}{AE}\mat{1&0&0\\0&-\nu&0\\0&0&-\nu} + \lambda \mat{1&0&0\\0&1&0\\0&0&1} \frac{F}{AE}(1-2\nu) \\
+E\mat{1&0&0\\0&0&0\\0&0&0} &= 2\mu\mat{1&0&0\\0&-\nu&0\\0&0&-\nu} + \lambda \mat{1&0&0\\0&1&0\\0&0&1}(1-2\nu) 
+\end{align*}
+\end{solution}
+
+\begin{exercise}
+What stress regimes (which components of stress you expect to be zero) in the below tray with legs? In two situations:
+\begin{enumerate}[label=\alph*)]
+\item all joints being fixed (welded).
+\item all joints being flexible (hinges).
+\end{enumerate}
+
+    \begin{tikzpicture}[tdplot_main_coords]
+        \coordinate (a) at (-2,-2,-2);
+        \coordinate (b) at (-2,2,-2);
+        \coordinate (c) at (2,-2,-2);
+        \coordinate (d) at (2,2,-2);
+        %\point{a}{0}{0};
+        \draw[very thick] (a) -- (-2,-2,1);
+        \draw[fill,gray,draw=black,very thick] (-2,-2,0) -- (-2,2,0) -- (2,2,0) -- (2,-2,0) -- cycle;
+        \draw[fill,gray,draw=black,very thick] (-2,-2,0) -- (-2,-2,1) -- (-2,2,1) -- (-2,2,0) -- cycle;
+        \draw[fill,gray,draw=black,very thick] (-2,-2,0) -- (-2,-2,1) -- (2,-2,1) -- (2,-2,0) -- cycle;
+        \draw[fill,gray,draw=black,very thick] (2,2,0) -- (2,2,1) -- (-2,2,1) -- (-2,2,0) -- cycle;
+        \draw[fill,gray,draw=black,very thick] (2,2,0) -- (2,2,1) -- (2,-2,1) -- (2,-2,0) -- cycle;
+        \draw[very thick] (b) -- (-2,2,1);
+        \draw[very thick] (c) -- (2,-2,1);
+        \draw[very thick] (d) -- (2,2,1);
+        \support{1}{a}; \hinge{1}{a};
+        \support{1}{b}; \hinge{1}{b};
+        \support{1}{c}; \hinge{1}{c};
+        \support{1}{d}; \hinge{1}{d};
+    \end{tikzpicture}
 \end{exercise}
 
 \end{document}
