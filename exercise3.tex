@@ -3,7 +3,7 @@
 \input{preamble}
 \setcounter{section}{3}
 
-\excludecomment{solution}
+%\excludecomment{solution}
 
 \begin{document}
 \subsection*{Exercises}
@@ -91,6 +91,16 @@ Substituting them into the constitutive equation:
 E\mat{1&0&0\\0&0&0\\0&0&0} &= 2\mu\mat{1&0&0\\0&-\nu&0\\0&0&-\nu} + \lambda \mat{1&0&0\\0&1&0\\0&0&1}(1-2\nu) 
 \end{align*}
 \end{solution}
+Finally:
+\begin{align*}
+    E &= 2\mu + \lambda(1-2\nu)\\
+    0 &= 2\mu(-\nu) + \lambda(1-2\nu)
+\end{align*}
+Solving the two we get:
+\begin{align*}
+    \mu &= \frac{E}{2(1+\nu)}\\
+    \lambda &= E\frac{\nu}{(1+nu)(1-2\nu)}
+\end{align*}
 
 \begin{exercise}
 What stress regimes (which components of stress you expect to be zero) in the below tray with legs? In two situations:
