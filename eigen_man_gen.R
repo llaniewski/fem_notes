@@ -30,8 +30,8 @@ segments(ret$P[ret$T[,1],1],ret$P[ret$T[,1],2],ret$P[ret$T[,2],1],ret$P[ret$T[,2
 segments(ret$P[ret$T[,2],1],ret$P[ret$T[,2],2],ret$P[ret$T[,3],1],ret$P[ret$T[,3],2])
 segments(ret$P[ret$T[,3],1],ret$P[ret$T[,3],2],ret$P[ret$T[,1],1],ret$P[ret$T[,1],2])
 
-write.table(ret$P, "man_points.txt", row.names=FALSE,col.names=FALSE)
-write.table(ret$T-1, "man_triangles.txt", row.names=FALSE,col.names=FALSE)
+write.table(ret$P, "mesh/man_points.txt", row.names=FALSE,col.names=FALSE)
+write.table(ret$T-1, "mesh/man_triangles.txt", row.names=FALSE,col.names=FALSE)
 
 
 tab = ret$P

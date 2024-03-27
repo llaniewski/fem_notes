@@ -9,8 +9,8 @@ alpha = 111e-6  # 111mm^2/s
 source = 1e-5 # K/s
 
 # Reading vertices and triangles from files
-points = np.loadtxt("mesh1_points.txt")
-elements = np.loadtxt("mesh1_triangles.txt",dtype=np.int64)
+points = np.loadtxt("mesh/mesh1_points.txt")
+elements = np.loadtxt("mesh/mesh1_triangles.txt",dtype=np.int64)
 
 # n=number of points, m=number of elements
 n = points.shape[0]
