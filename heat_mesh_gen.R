@@ -15,7 +15,6 @@ points = rbind(points, matrix(c(cos(a)*0.25+0.5,sin(a)*0.25+0.5),ncol=2))
 segments = rbind(segments, matrix(c(1:n,2:n,1),ncol=2)+k)
 k = k + n
 
-
 p = RTriangle::pslg(points,S = segments, H=matrix(c(0.5,0.5),ncol=2))
 
 ret = RTriangle::triangulate(p,a=0.01,q=30)
