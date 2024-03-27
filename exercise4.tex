@@ -1,7 +1,9 @@
 \documentclass[12pt,class=article,crop=false,preview=false]{standalone}
 
 \input{preamble}
-\setcounter{section}{2}
+\setcounter{section}{4}
+
+%\excludecomment{solution}
 
 \begin{document}
 \subsection*{Exercises}
@@ -9,9 +11,44 @@
 \begin{exercise}
     Write the form of the stress and strain matrices on the symmetry plane (assume the symmetry is in $z$ direction)
 \end{exercise}
+\usetikzlibrary {angles} 
+\begin{exercise}
+    Let us have a function $u(x)$, which describes the deformation of a beam with ends as $x=-1$ and $x=1$.
+    \begin{enumerate}[label=\alph*)]
+        \item\label{repfrom} If $u$ is a polynomial $ax^0+bx^1+cx^2+dx^3+ex^4+\dots$, what is its minimum order to be able to fulfill four conditions: $u(-1)=A$, $u'(-1)=B$, $u(1)=C$, $u'(1)=D$?
+    \begin{center}\begin{tikzpicture}
+        \coordinate (A) at (0,1);
+        \coordinate (B) at (1,1.5);
+        \coordinate (B2) at (1,1);
+        \coordinate (C) at (2,-0.5);
+        \coordinate (C2) at (2,0);
+        \coordinate (D) at (3,0);
+        \draw (A) .. controls (B) and (C) .. (D);
+        \draw[dashed] (A) -- (B);
+        \draw[dashed] (C) -- (D);
+        \pic [draw,<->,red,angle radius=1cm] {angle = B2--A--B};
+        \node[anchor=north west,red] at (B) {B};
+        \pic [draw,<->,red,angle radius=1cm] {angle = C2--D--C};
+        \node[anchor=south east,red] at (C) {C};
+        \draw [<->,red] ([xshift=-10pt,yshift=-10pt]A)--([xshift=-10pt,yshift=10pt]A) node[midway,left] {A};
+        \draw [red] ([xshift=-10pt]A)--([xshift=0pt]A);
+        \draw [<->,red] ([xshift=10pt,yshift=-10pt]D)--([xshift=10pt,yshift=10pt]D)
+        node[midway,right] {D};
+        \draw [red] ([xshift=10pt]D)--([xshift=0pt]D);
+        \node at (A) [circle,fill,inner sep=2pt]{};
+        \node at (D) [circle,fill,inner sep=2pt]{};
+    \end{tikzpicture}\end{center}
+        \item Write out the equations for the coefficients of this polynomial.
+        \item Express the equations from previous point as a matrix equation.
+        \item\label{repto} Solve the equations (preferably not by hand) and express $u(x)$ as $A\phi_1(x)+B\phi_2(x)+C\phi_3(x)+D\phi_4(x)$.
+        \item Repeat the points \ref{repfrom}-\ref{repto}, replacing a polynomial with a trigonometric expression: $a\cos{0\frac{x\pi}{2}}+b\sin{1\frac{x\pi}{2}}+c\cos{1\frac{x\pi}{2}}+d\sin{2\frac{x\pi}{2}}+e\cos{2\frac{x\pi}{2}}+\cdots$
+    \end{enumerate}
+\end{exercise}
 
 \begin{exercise}
-    TODO
+    What is the minimal Gauss quadrature (\url{https://en.wikipedia.org/wiki/Gaussian_quadrature}) that one would have to use to compute the integrals:
+    \[a)\int_{-1}^1\phi_i(x)\phi_j(x)dx\quad\text{and}\quad b)\int_{-1}^1\phi'_i(x)\phi'_j(x)\]
+    where $\phi$ are the shape functions from point \ref{repto} of the previous exercise for the polynomial case.
 \end{exercise}
 
 \end{document}
